@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.blizzard.user.mapper.UserMapper">
+
+    <select id="loginUserCheck" parameterType="String" resultType="map">
+        SELECT id, phone, gender, age FROM member WHERE id = #{id} AND password = #{pw}
+    </select>
+
+    <select id="checkId" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM member WHERE id = #{id}
+    </select>
+
+    <insert id="signUp" parameterType="com.spring.blizzard.user.dto.User">
+        INSERT INTO member(id, password, phone, gender, age, email, subscription) VALUES(#{id}, #{password}, #{phone}, #{gender}, #{age}, #{email}, #{subscription})
+    </insert>
+
+    <select id="initalCheck" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM monster_collection WHERE member_id = #{id};
+    </select>
+
+    <insert id="insertEggChoise" parameterType="String" >
+        INSERT INTO monster_collection VALUES(#{id}, #{monster}, 1, 0);
+    </insert>
+
+</mapper>

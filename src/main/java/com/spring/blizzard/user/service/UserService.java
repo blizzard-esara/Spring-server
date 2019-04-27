@@ -1,0 +1,72 @@
+package com.spring.blizzard.user.service;
+
+import com.spring.blizzard.user.dto.User;
+import com.spring.blizzard.user.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class UserService {
+
+    @Autowired
+    UserMapper userMapper;
+
+    public List<Map<String, Object>> loginUser (HttpServletRequest request) throws Exception {
+        String id = request.getParameter("id");
+        String pw = request.getParameter("pw");
+
+        return userMapper.loginUserCheck(id, pw);
+    }
+
+    public boolean checkId(HttpServletRequest request) throws Exception {
+        boolean result = false;
+        String id = request.getParameter("id");
+        if(userMapper.checkId(id) == 0) {
+            result = true;
+        }
+
+        return result;
+    }
+    public boolean initalCheck(HttpServletRequest request) throws Exception {
+        boolean result = false;
+        String id = request.getParameter("id");
+        if(userMapper.initalCheck(id) == 0) result = true;
+
+        return result;
+    }
+
+    public boolean signUp(HttpServletRequest request) throws Exception {
+        boolean result = false;
+        System.out.println(request.getParameter("phone").toString());
+        User user = new User(request.getParameter("id"),
+                                request.getParameter("pw"),
+                                request.getParameter("phone"),
+                                request.getParameter("gender"),
+                                Integer.parseInt(request.getParameter("age")),
+                                        request.getParameter("email"),
+                                        Integer.parseInt(request.getParameter("subscription")));
+
+        int dbResult = userMapper.signUp(user);
+
+        if(dbResult == 1) result = true;
+
+        return result;
+    }
+
+
+    public boolean eggChoise(HttpServletRequest request) throws Exception {
+        boolean result = false;
+        String id = request.getParameter("id");
+        String monster =request.getParameter("monster");
+
+        if(userMapper.insertEggChoise(id, monster) == 1) {
+            result = true;
+        }
+
+        return result;
+    }
+}
