@@ -26,7 +26,7 @@ public class UserController {
         return userService.checkId(request);
     }
     @RequestMapping("/initalCheck")
-    public @ResponseBody boolean initalCheck(HttpServletRequest request) throws Exception {
+    public @ResponseBody List<Map<String, Object>>  initalCheck(HttpServletRequest request) throws Exception {
         return userService.initalCheck(request);
     }
 
@@ -38,5 +38,11 @@ public class UserController {
     @RequestMapping("/eggChoise")
     public @ResponseBody boolean eggChoise(HttpServletRequest request) throws Exception {
         return userService.eggChoise(request);
+    }
+
+
+    @RequestMapping("/mainMonsterImageURL")
+    public @ResponseBody String mainMonsterImageURL(HttpServletRequest request) throws Exception {
+        return userService.mainMonsterImageURL(request);
     }
 }

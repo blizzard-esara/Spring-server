@@ -31,12 +31,11 @@ public class UserService {
 
         return result;
     }
-    public boolean initalCheck(HttpServletRequest request) throws Exception {
-        boolean result = false;
-        String id = request.getParameter("id");
-        if(userMapper.initalCheck(id) == 0) result = true;
+    public List<Map<String, Object>> initalCheck(HttpServletRequest request) throws Exception {
 
-        return result;
+        String id = request.getParameter("id");
+        return userMapper.initalCheck(id);
+
     }
 
     public boolean signUp(HttpServletRequest request) throws Exception {
@@ -68,5 +67,13 @@ public class UserService {
         }
 
         return result;
+    }
+
+
+    public String mainMonsterImageURL(HttpServletRequest request) throws Exception {
+        String id = request.getParameter("id");
+        String mainMonster = request.getParameter("mainMonster");
+        return userMapper.mainMosterImageURL(id, mainMonster);
+
     }
 }

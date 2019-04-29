@@ -14,12 +14,20 @@
         INSERT INTO member(id, password, phone, gender, age, email, subscription) VALUES(#{id}, #{password}, #{phone}, #{gender}, #{age}, #{email}, #{subscription})
     </insert>
 
-    <select id="initalCheck" parameterType="String" resultType="int">
-        SELECT COUNT(*) FROM monster_collection WHERE member_id = #{id};
+    <select id="initalCheck" parameterType="String" resultType="map">
+        SELECT monster_kind_name AS monster,
+                level, exp FROM monster_collection WHERE member_id = #{id};
     </select>
 
     <insert id="insertEggChoise" parameterType="String" >
         INSERT INTO monster_collection VALUES(#{id}, #{monster}, 1, 0);
     </insert>
+
+    <select id="mainMosterImageURL" parameterType="String" resultType="String">
+        SELECT url FROM monster_mapping
+        WHERE name = #{mainMonster} AND lv = (
+            SELECT level from monster_collection WHERE member_id = #{id}
+        );
+    </select>
 
 </mapper>
