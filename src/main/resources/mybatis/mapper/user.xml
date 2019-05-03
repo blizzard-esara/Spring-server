@@ -3,7 +3,7 @@
 <mapper namespace="com.spring.blizzard.user.mapper.UserMapper">
 
     <select id="loginUserCheck" parameterType="String" resultType="map">
-        SELECT id, phone, gender, age FROM member WHERE id = #{id} AND password = #{pw}
+        SELECT id, phone, gender, age, money FROM member WHERE id = #{id} AND password = #{pw}
     </select>
 
     <select id="checkId" parameterType="String" resultType="int">
@@ -11,7 +11,7 @@
     </select>
 
     <insert id="signUp" parameterType="com.spring.blizzard.user.dto.User">
-        INSERT INTO member(id, password, phone, gender, age, email, subscription) VALUES(#{id}, #{password}, #{phone}, #{gender}, #{age}, #{email}, #{subscription})
+        INSERT INTO member(id, password, phone, gender, age, email, subscription, money) VALUES(#{id}, #{password}, #{phone}, #{gender}, #{age}, #{email}, #{subscription}, 0)
     </insert>
 
     <select id="initalCheck" parameterType="String" resultType="map">
@@ -26,8 +26,13 @@
     <select id="mainMosterImageURL" parameterType="String" resultType="String">
         SELECT url FROM monster_mapping
         WHERE name = #{mainMonster} AND lv = (
-            SELECT level from monster_collection WHERE member_id = #{id}
+            SELECT level from monster_collection WHERE member_id = #{id} AND monster_kind_name = #{mainMonster}
         );
     </select>
+
+    <update id="updateItemPrice" parameterType="map">
+        UPDATE member SET money = money - #{price} WHERE id = #{id}
+    </update>
+
 
 </mapper>

@@ -14,4 +14,6 @@ public interface UserMapper {
     public List<Map<String, Object>> initalCheck(String id) throws Exception;
     public int insertEggChoise(String id, String monster) throws Exception;
     public String mainMosterImageURL(String id, String mainMonster) throws Exception;
+    public int updateItemPrice(Map<String, Object> map) throws Exception;
+    public int addItem(String id, String item) throws Exception;
 }

@@ -45,4 +45,9 @@ public class UserController {
     public @ResponseBody String mainMonsterImageURL(HttpServletRequest request) throws Exception {
         return userService.mainMonsterImageURL(request);
     }
+
+    @RequestMapping("/buyItem")
+    public @ResponseBody List<Map<String, Object>> buyItem(HttpServletRequest request) throws Exception {
+        return userService.buyItem(request);
+    }
 }

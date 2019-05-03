@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -75,5 +77,19 @@ public class UserService {
         String mainMonster = request.getParameter("mainMonster");
         return userMapper.mainMosterImageURL(id, mainMonster);
 
+    }
+
+    public List<Map<String, Object>> buyItem(HttpServletRequest request) throws Exception {
+        String id = request.getParameter("id");
+        String item = request.getParameter("item");
+        int price = Integer.parseInt(request.getParameter("price"));
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("id", id);
+        map.put("price",price);
+
+        userMapper.updateItemPrice(map);
+        userMapper.insertEggChoise(id, item);
+
+        return userMapper.initalCheck(id);
     }
 }
