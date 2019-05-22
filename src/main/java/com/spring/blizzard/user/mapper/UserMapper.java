@@ -16,4 +16,11 @@ public interface UserMapper {
     public String mainMosterImageURL(String id, String mainMonster) throws Exception;
     public int updateItemPrice(Map<String, Object> map) throws Exception;
     public int addItem(String id, String item) throws Exception;
+
+    public List<Map<String, Object>> getlockMonsterUrl() throws Exception;
+    public List<Map<String, Object>> getUnLockUserMonster(String id) throws Exception;
+
+    public List<Map<String, Object>> monsterCount(String id) throws Exception;
+
+    public int modifyUser(String id, String email, String phone) throws Exception;
 }

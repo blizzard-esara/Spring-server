@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.blizzard.user.mapper.ContentsMapper">
+
+
+
+<select id="unlockExplanationList" parameterType="String" resultType="map">
+    SELECT col FROM solve_explanation WHERE member_id = #{id}
+</select>
+
+    <select id="explanationList" resultType="com.spring.blizzard.user.dto.Explanation">
+        SELECT col,
+            theme_kind AS theme,
+            theme_level AS level,
+            title,
+            contents
+        FROM explanation
+    </select>
+
+    <select id="getAttr" parameterType="Integer" resultType="map">
+        SELECT attr_type AS type, attr_url AS url FROM explanation_attr WHERE explanation_col = #{col}
+    </select>
+
+    <select id="getQuizListInit" parameterType="String" resultType="com.spring.blizzard.user.dto.Quiz">
+        SELECT col, title, contents,
+                choise_1, choise_2, choise_3, choise_4,
+                choise_count, answer, answer_path, explanation_col
+        FROM question WHERE theme_kind = #{theme} AND theme_level = #{level}
+    </select>
+
+    <select id="getQuizList" parameterType="map" resultType="com.spring.blizzard.user.dto.Quiz">
+        SELECT col, title, contents,
+                choise_1, choise_2, choise_3, choise_4,
+                choise_count, answer, answer_path, explanation_col
+        FROM question WHERE explanation_col
+        NOT IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        AND theme_kind = #{theme} AND theme_level = #{level}
+    </select>
+
+    <select id="getQuizAttrSize" parameterType="Integer" resultType="Integer">
+        SELECT COUNT(*) FROM question_attr WHERE question_col = #{col}
+    </select>
+
+    <select id="getQuestionAttr" parameterType="Integer" resultType="map">
+        SELECT attr_type AS type, attr_url AS url FROM question_attr WHERE question_col = #{col}
+    </select>
+
+    <insert id="insertSolve" parameterType="String">
+        INSERT INTO solve_explanation VALUES(#{id}, #{col})
+    </insert>
+
+    <select id="explanationShow" parameterType="Integer" resultType="com.spring.blizzard.user.dto.Explanation">
+        SELECT
+            title,
+            contents
+        FROM explanation WHERE col = #{col}
+    </select>
+</mapper>

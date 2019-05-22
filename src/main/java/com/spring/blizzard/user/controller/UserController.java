@@ -50,4 +50,19 @@ public class UserController {
     public @ResponseBody List<Map<String, Object>> buyItem(HttpServletRequest request) throws Exception {
         return userService.buyItem(request);
     }
+
+    @RequestMapping("/monsterCollection")
+    public @ResponseBody List<Map<String, Object>> monsterCollection(HttpServletRequest request) throws Exception {
+        return userService.monsterCollection(request);
+    }
+
+    @RequestMapping("/monsterCount")
+    public @ResponseBody List<Map<String, Object>> monsterCount(HttpServletRequest request) throws Exception {
+        return userService.monsterCount(request);
+    }
+
+    @RequestMapping("/modifyUser")
+    public @ResponseBody int modifyUser(HttpServletRequest request) throws Exception {
+        return userService.modifyUser(request);
+    }
 }

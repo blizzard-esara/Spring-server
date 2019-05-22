@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -42,14 +40,19 @@ public class UserService {
 
     public boolean signUp(HttpServletRequest request) throws Exception {
         boolean result = false;
-        System.out.println(request.getParameter("phone").toString());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
+        String date = sdf.format(today);
         User user = new User(request.getParameter("id"),
                                 request.getParameter("pw"),
                                 request.getParameter("phone"),
                                 request.getParameter("gender"),
                                 Integer.parseInt(request.getParameter("age")),
                                         request.getParameter("email"),
-                                        Integer.parseInt(request.getParameter("subscription")));
+                                        Integer.parseInt(request.getParameter("subscription")),
+                                        date
+                                    );
 
         int dbResult = userMapper.signUp(user);
 
@@ -91,5 +94,36 @@ public class UserService {
         userMapper.insertEggChoise(id, item);
 
         return userMapper.initalCheck(id);
+    }
+
+    public List<Map<String, Object>> monsterCollection(HttpServletRequest request) throws Exception {
+        String id = request.getParameter("id");
+        List<Map<String, Object>> urlList = userMapper.getlockMonsterUrl();
+        List<Map<String, Object>> unlockList = userMapper.getUnLockUserMonster(id);
+
+        for(int i = 0 ; i < urlList.size() ; i++) {
+
+            for(int j = 0 ; j< unlockList.size() ; j++) {
+                if(urlList.get(i).get("monster_name").equals(unlockList.get(j).get("monster_name"))) {
+                    urlList.get(i).replace("url", unlockList.get(j).get("open_url"));
+                }
+            }
+        }
+        return urlList;
+    }
+
+    public List<Map<String, Object>> monsterCount(HttpServletRequest request) throws Exception {
+        String id = request.getParameter("id");
+
+        return userMapper.monsterCount(id);
+
+    }
+
+    public int modifyUser(HttpServletRequest request) throws Exception {
+        String id = request.getParameter("id");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+
+        return userMapper.modifyUser(id, email, phone);
     }
 }

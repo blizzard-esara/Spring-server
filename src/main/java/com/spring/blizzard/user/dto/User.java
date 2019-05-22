@@ -8,8 +8,9 @@ public class User {
     private int age;
     private String email;
     private int subscription;
+    private String startDate;
 
-    public User(String id, String pw, String phone, String gender, int age, String email, int subscription) {
+    public User(String id, String pw, String phone, String gender, int age, String email, int subscription, String startDate) {
         this.id = id;
         this.password = pw;
         this.phone = phone;
@@ -73,5 +74,13 @@ public class User {
 
     public void setSubscription(int subscription) {
         this.subscription = subscription;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
 }

@@ -3,7 +3,7 @@
 <mapper namespace="com.spring.blizzard.user.mapper.UserMapper">
 
     <select id="loginUserCheck" parameterType="String" resultType="map">
-        SELECT id, phone, gender, age, money FROM member WHERE id = #{id} AND password = #{pw}
+        SELECT id, phone, gender, age, money, DATEDIFF(curDate(), (SELECT start_date FROM member WHERE id = "12"))+1 AS date, email FROM member WHERE id = #{id} AND password = #{pw}
     </select>
 
     <select id="checkId" parameterType="String" resultType="int">
@@ -11,22 +11,22 @@
     </select>
 
     <insert id="signUp" parameterType="com.spring.blizzard.user.dto.User">
-        INSERT INTO member(id, password, phone, gender, age, email, subscription, money) VALUES(#{id}, #{password}, #{phone}, #{gender}, #{age}, #{email}, #{subscription}, 0)
+        INSERT INTO member(id, password, phone, gender, age, email, subscription, money, start_date) VALUES(#{id}, #{password}, #{phone}, #{gender}, #{age}, #{email}, #{subscription}, 0, #{startDate})
     </insert>
 
     <select id="initalCheck" parameterType="String" resultType="map">
         SELECT monster_kind_name AS monster,
-                level, exp FROM monster_collection WHERE member_id = #{id};
+                level, exp FROM egg_collection WHERE member_id = #{id};
     </select>
 
     <insert id="insertEggChoise" parameterType="String" >
-        INSERT INTO monster_collection VALUES(#{id}, #{monster}, 1, 0);
+        INSERT INTO egg_collection VALUES(#{id}, #{monster}, 1, 0);
     </insert>
 
     <select id="mainMosterImageURL" parameterType="String" resultType="String">
-        SELECT url FROM monster_mapping
+        SELECT url FROM egg_mapping
         WHERE name = #{mainMonster} AND lv = (
-            SELECT level from monster_collection WHERE member_id = #{id} AND monster_kind_name = #{mainMonster}
+            SELECT level from egg_collection WHERE member_id = #{id} AND monster_kind_name = #{mainMonster}
         );
     </select>
 
@@ -34,5 +34,24 @@
         UPDATE member SET money = money - #{price} WHERE id = #{id}
     </update>
 
+    <select id="getlockMonsterUrl" parameterType="String" resultType="map">
+        SELECT monster_name, lock_url AS url from monster_list ORDER BY monster_type DESC, monster_name ASC;
+    </select>
 
+    <select id="getUnLockUserMonster" parameterType="String" resultType="map">
+        SELECT monster_name, open_url FROM monster_list WHERE monster_name IN
+            (
+                SELECT monster_name
+                FROM monster_collection
+                WHERE member_id = #{id}
+            );
+    </select>
+
+    <select id="monsterCount" parameterType="String" resultType="map">
+        SELECT monster_type, COUNT(*) AS cnt FROM monster_collection WHERE member_id = #{id} GROUP BY monster_type;
+    </select>
+
+    <update id="modifyUser" parameterType="String">
+        UPDATE INTO member SET email = #{email} AND phone = #{phone} WHERE id = {#id}
+    </update>
 </mapper>
